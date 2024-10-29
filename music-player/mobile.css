@@ -1,0 +1,92 @@
+@media screen and (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+        position: fixed;
+        top: 15px;
+        right: 15px;
+        z-index: 1001;
+        background: none;
+        border: none;
+        color: var(--text-primary);
+        font-size: 24px;
+        cursor: pointer;
+        padding: 10px;
+    }
+
+    .app-container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        height: 100vh;
+        width: 250px;
+        z-index: 1000;
+        transition: transform 0.3s ease;
+        background: var(--background-dark);
+        transform: translateX(-100%);
+    }
+
+    .sidebar.active {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        grid-column: 1;
+        padding: 15px;
+        padding-top: 60px;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+
+    .songs-container {
+        overflow-x: auto;
+    }
+
+    #songsList {
+        min-width: 600px;
+    }
+
+    .player-bar {
+        grid-column: 1;
+        padding: 10px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .now-playing {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .player-controls {
+        width: 100%;
+        order: -1;
+    }
+
+    .volume-control {
+        display: none;
+    }
+
+    .progress-bar {
+        height: 15px;
+    }
+
+    .control-buttons button {
+        padding: 15px;
+    }
+
+    #albumArt {
+        width: 50px;
+        height: 50px;
+    }
+} 

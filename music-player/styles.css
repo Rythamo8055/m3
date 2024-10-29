@@ -1,0 +1,721 @@
+:root {
+    --primary-color: #F4B400;      /* Saffron */
+    --primary-dark: #D49B00;       /* Darker Saffron */
+    --primary-light: #FFD54F;      /* Light Saffron */
+    --background-dark: #121212;    /* Spotify Dark */
+    --background-light: #282828;   /* Spotify Card Background */
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3B3B3;
+    --card-hover: #2A2A2A;
+    --neon-glow: 0 0 8px rgba(244, 180, 0, 0.3);
+    --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    --hover-lift: translateY(-5px);
+    --perspective: 1000px;
+    --rotation-deg: 5deg;
+    --glow-spread: 20px;
+    --neon-pulse: 0 0 20px var(--primary-color);
+    --hologram-color: rgba(244, 180, 0, 0.15);
+    --grid-color: rgba(244, 180, 0, 0.05);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-dark);
+    color: var(--text-primary);
+}
+
+.app-container {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    grid-template-rows: 1fr 90px;
+    height: 100vh;
+}
+
+.sidebar {
+    background-color: var(--background-dark);
+    padding: 20px;
+    border-right: 1px solid #282828;
+}
+
+.logo h2 {
+    color: var(--text-primary);
+    margin-bottom: 30px;
+}
+
+.sidebar nav ul {
+    list-style: none;
+}
+
+.sidebar nav li {
+    padding: 12px 0;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: color 0.3s;
+}
+
+.sidebar nav li:hover, .sidebar nav li.active {
+    color: var(--text-primary);
+}
+
+.sidebar nav li i {
+    margin-right: 10px;
+}
+
+.main-content {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.search-bar {
+    position: relative;
+    width: 300px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 10px 35px 10px 15px;
+    border: none;
+    border-radius: 20px;
+    background-color: var(--background-light);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.search-bar i {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+.search-bar input:focus + i {
+    color: var(--primary-color);
+}
+
+.upload-section {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.upload-btn {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 12px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.9em;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hide the default file input */
+input[type="file"] {
+    display: none;
+}
+
+/* Add selected files counter */
+.upload-btn::after {
+    content: attr(data-files);
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 10px;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.3s ease;
+}
+
+.upload-btn.has-files::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.upload-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 119, 34, 0.1),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.upload-btn:hover::before {
+    left: 100%;
+}
+
+.upload-btn:hover {
+    box-shadow: var(--neon-glow);
+    background: var(--primary-color);
+    color: var(--background-dark);
+}
+
+.upload-btn i {
+    transition: transform 0.3s ease;
+}
+
+.upload-btn:hover i {
+    transform: rotate(90deg);
+}
+
+.upload-progress {
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+
+.uploading .upload-progress {
+    width: 100%;
+}
+
+.songs-container {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#songsList {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#songsList th, #songsList td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--background-light);
+}
+
+#songsList th {
+    color: var(--text-secondary);
+    font-weight: normal;
+}
+
+.player-bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    background-color: #181818;
+    border-top: 1px solid #282828;
+    padding: 15px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.now-playing {
+    display: flex;
+    align-items: center;
+    width: 300px;
+}
+
+#albumArt {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    border-radius: 5px;
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+    box-shadow: var(--card-shadow);
+    cursor: pointer;
+}
+
+#albumArt:hover {
+    transform: var(--hover-lift) rotate3d(1, 1, 0, var(--rotation-deg));
+}
+
+.track-info {
+    overflow: hidden;
+}
+
+#currentSong {
+    color: var(--text-primary);
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#currentArtist {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+}
+
+.player-controls {
+    flex: 1;
+    max-width: 600px;
+    text-align: center;
+}
+
+.control-buttons button {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 1.2em;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+    perspective: var(--perspective);
+}
+
+.control-buttons button:hover {
+    transform: translateZ(20px);
+    color: var(--primary-color);
+    text-shadow: 0 0 15px var(--primary-glow);
+    transform: scale(1.1);
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.progress-bar {
+    flex: 1;
+    height: 4px;
+    background: #404040;
+    margin: 0 10px;
+    cursor: pointer;
+    position: relative;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: var(--primary-color);
+    width: 0;
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+    width: 250px;
+}
+
+.volume-control i {
+    margin-right: 10px;
+    color: var(--text-secondary);
+}
+
+#volumeSlider {
+    width: 100px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: #404040;
+    border-radius: 2px;
+}
+
+#volumeSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(244, 180, 0, 0.2);
+}
+
+#volumeSlider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 10px rgba(255, 119, 34, 0.3);
+}
+
+.active {
+    color: var(--primary-color) !important;
+    text-shadow: var(--neon-glow);
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 5px;
+    margin: 0 5px;
+    transition: color 0.3s;
+}
+
+.action-btn:hover {
+    color: var(--primary-color);
+}
+
+.delete-btn {
+    color: #ff4444;
+}
+
+.delete-btn:hover {
+    color: #ff0000;
+}
+
+/* Add at the end of your CSS file */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+}
+
+.no-results {
+    text-align: center;
+    padding: 40px 0;
+    color: var(--text-secondary);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.no-results i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.no-results p {
+    font-size: 1.1em;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-overlay.active .modal-content {
+    transform: scale(1);
+    opacity: 1;
+}
+
+.modal-content {
+    background-color: var(--background-light);
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 380px;
+    text-align: center;
+    transform: scale(0.95);
+    opacity: 0;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-icon {
+    font-size: 40px;
+    color: #f39c12;
+    margin-bottom: 15px;
+}
+
+.modal-content h2 {
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.modal-content p {
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+    line-height: 1.4;
+    font-size: 0.95em;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    min-width: 100px;
+}
+
+.cancel-btn {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cancel-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.confirm-btn {
+    background-color: #f39c12;
+    color: white;
+}
+
+.confirm-btn:hover {
+    background-color: #e67e22;
+    transform: translateY(-1px);
+}
+
+/* Add fun hover animation for songs list rows */
+#songsList tr {
+    transition: all 0.3s ease;
+    position: relative;
+    cursor: pointer;
+}
+
+#songsList tr:hover {
+    background: var(--card-hover);
+    transform: scale(1.005);
+}
+
+/* Add bounce animation for controls */
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* Add pulse animation for the currently playing song */
+@keyframes softPulse {
+    0% { background-color: transparent; }
+    50% { background-color: rgba(255, 119, 34, 0.05); }
+    100% { background-color: transparent; }
+}
+
+tr.playing {
+    animation: softPulse 2s infinite;
+    background: rgba(244, 180, 0, 0.1) !important;
+}
+
+#songsList tr.playing {
+    background: linear-gradient(90deg, 
+        rgba(255, 119, 34, 0.1), 
+        rgba(255, 119, 34, 0.15), 
+        rgba(255, 119, 34, 0.1)
+    );
+}
+
+.volume-percentage {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    min-width: 45px;
+    margin-left: 8px;
+}
+
+/* Update volume control width to accommodate percentage */
+.volume-control {
+    display: flex;
+    align-items: center;
+    width: 250px;
+}
+
+/* Mobile Responsive Design */
+@media screen and (max-width: 768px) {
+    .app-container {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr 90px;
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: -250px;
+        height: 100vh;
+        width: 250px;
+        z-index: 1000;
+        transition: left 0.3s ease;
+        background: var(--background-dark);
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .main-content {
+        grid-column: 1;
+        padding: 15px;
+    }
+
+    .top-bar {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+
+    .player-bar {
+        padding: 10px;
+    }
+
+    .now-playing {
+        width: auto;
+    }
+
+    .player-controls {
+        flex: 0 1 auto;
+    }
+
+    .volume-control {
+        display: none;
+    }
+
+    /* Hamburger Menu */
+    .menu-toggle {
+        display: block;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1001;
+        background: none;
+        border: none;
+        color: var(--text-primary);
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    /* Touch-friendly adjustments */
+    .progress-bar {
+        height: 12px;
+    }
+
+    .control-buttons button {
+        padding: 15px;
+    }
+
+    /* Swipe area for player */
+    .swipe-area {
+        position: fixed;
+        bottom: 90px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.05);
+        display: none;
+    }
+
+    .swipe-area.active {
+        display: block;
+    }
+}
+
+/* Add at the end of the file */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    display: block;
+    opacity: 1;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
+
+/* Improve touch targets */
+.control-buttons button {
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* Add active states for touch */
+.control-buttons button:active {
+    transform: scale(0.95);
+}
+
+/* Prevent text selection */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    user-select: none;
+}
+
+input, textarea {
+    user-select: text;
+}
